@@ -1,0 +1,31 @@
+# Create table HEALTHCARE_UNIT
+CREATE TABLE healthcare_unit (
+    id integer NOT NULL,
+    unit_name character varying(256) NOT NULL,
+    address character varying(256) NOT NULL,
+    postal_code character varying(256) NOT NULL,
+    city character varying(256) NOT NULL
+);
+
+INSERT INTO public.healthcare_unit(
+	id, unit_name, address, postal_code, city)
+	VALUES (1, 'InfoSyf', 'Rondo Solidarnosci', '00-00', 'Lodz');
+
+# Create table DOCTOR
+CREATE TABLE doctor (
+    id integer NOT NULL,
+    healthcare_unit_id integer NOT NULL,
+    email character varying(256) NOT NULL,
+    password character varying(256) NOT NULL,
+    first_name character varying NOT NULL,
+    last_name character varying(256) NOT NULL,
+    birth_date date NOT NULL,
+    pesel character varying(11) NOT NULL,
+    specialisation character varying(256) NOT NULL,
+    phone_number character varying(256) NOT NULL
+);
+
+# Insert data
+INSERT INTO public.doctor(
+	id, healthcare_unit_id, email, password, first_name, last_name, birth_date, pesel, specialisation, phone_number)
+	VALUES (1, 1, 'szymar95@gmail.com', 'testpass', 'Szymon', 'Marciniak', '1995-11-28', '95112800000', 'oncologist', '000000000');
