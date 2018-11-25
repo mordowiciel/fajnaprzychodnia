@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import app.model.Doctor;
 import app.repository.DoctorRepository;
 
-@RestController
+@RestController()
+@RequestMapping("/doctor")
 public class DoctorController {
 
     @Autowired
     DoctorRepository doctorRepository;
 
-    @RequestMapping(value = "/doctor/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/allDoctors", method = RequestMethod.GET)
     public ResponseEntity allDoctors() {
         List<Doctor> doctors = doctorRepository.findAll();
         return ResponseEntity

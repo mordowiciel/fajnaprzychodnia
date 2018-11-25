@@ -25,7 +25,22 @@ CREATE TABLE doctor (
     phone_number character varying(256) NOT NULL
 );
 
-# Insert data
 INSERT INTO public.doctor(
 	id, healthcare_unit_id, email, password, first_name, last_name, birth_date, pesel, specialisation, phone_number)
 	VALUES (1, 1, 'szymar95@gmail.com', 'testpass', 'Szymon', 'Marciniak', '1995-11-28', '95112800000', 'oncologist', '000000000');
+
+# Create table PRESCRIPTION
+CREATE TABLE prescription (
+    id integer NOT NULL,
+    patient_id integer NOT NULL,
+    doctor_id integer NOT NULL,
+    healthcare_unit_id integer NOT NULL,
+    date_of_issue date NOT NULL,
+    date_of_expiration date NOT NULL,
+    content text NOT NULL
+);
+
+INSERT INTO public.prescription(
+	id, patient_id, doctor_id, healthcare_unit_id, date_of_issue, date_of_expiration, content)
+	VALUES (1, 1, 1, 1, '2018-11-25', '2018-12-09', 'xanax 5mg, marijuana 10g weekly');
+

@@ -9,21 +9,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.model.Patient;
-import app.repository.PatientRepository;
+import app.model.Prescription;
+import app.repository.PrescriptionRepository;
 
-@RestController()
-@RequestMapping(value = "/patient")
-public class PatientController {
+@RestController
+@RequestMapping(value="/prescription")
+public class PrescriptionController {
 
     @Autowired
-    PatientRepository patientRepository;
+    PrescriptionRepository prescriptionRepository;
 
-    @RequestMapping(value = "/allPatients", method = RequestMethod.GET)
-    public ResponseEntity allPatients() {
-        List<Patient> patients = patientRepository.findAll();
+    @RequestMapping(value = "/allPrescriptions", method = RequestMethod.GET)
+    public ResponseEntity allPrescriptions() {
+        List<Prescription> prescriptions = prescriptionRepository.findAll();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(patients);
+                .body(prescriptions);
     }
 }
