@@ -3,17 +3,53 @@ package app.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="visit")
 public class Visit {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int id;
+    @OneToOne
     private Patient patient;
+    @OneToOne
     private Doctor doctor;
+    @OneToOne
     private HealthcareUnit healthcareUnit;
+    @Column(name = "visit_date")
     private Date visitDate;
+    @Column(name = "symptoms")
     private String symptoms;
+    @Column(name = "diagnosis")
     private String diagnosis;
+
+    @ManyToMany
+    @JoinTable(name = "visit_prescription",
+            joinColumns=@JoinColumn(name="visit_id", referencedColumnName="id"),
+            inverseJoinColumns=@JoinColumn(name="prescription_id", referencedColumnName="id"))
     private List<Prescription> prescriptions;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="status")
     private VisitStatus visitStatus;
+
+    public Visit() {
+
+    }
 
     public Visit(int id, Patient patient, Doctor doctor, HealthcareUnit healthcareUnit, Date visitDate,
                  String symptoms, String diagnosis, List<Prescription> prescriptions, VisitStatus visitStatus) {

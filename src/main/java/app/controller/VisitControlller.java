@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.model.Prescription;
-import app.repository.PrescriptionRepository;
+import app.model.Visit;
+import app.repository.VisitRepository;
 
 @RestController
-@RequestMapping(value="/prescription")
-public class PrescriptionController {
+@RequestMapping("/visit")
+public class VisitControlller {
 
     @Autowired
-    PrescriptionRepository prescriptionRepository;
+    VisitRepository visitRepository;
 
-    @RequestMapping(value = "/allVisits", method = RequestMethod.GET)
-    public ResponseEntity allPrescriptions() {
-        List<Prescription> prescriptions = prescriptionRepository.findAll();
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public ResponseEntity allVisits() {
+        List<Visit> prescriptions = visitRepository.findAll();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(prescriptions);

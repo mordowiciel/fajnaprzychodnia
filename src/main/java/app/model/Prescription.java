@@ -35,8 +35,8 @@ public class Prescription {
 
     }
 
-    public Prescription(int id, Patient patient, Doctor doctor, HealthcareUnit healthcareUnit,
-                        Date dateOfIssue, Date expirationDate, String content) {
+    public Prescription(int id, Patient patient, Doctor doctor, HealthcareUnit healthcareUnit, Date dateOfIssue,
+                        Date expirationDate, String content) {
         this.id = id;
         this.patient = patient;
         this.doctor = doctor;
