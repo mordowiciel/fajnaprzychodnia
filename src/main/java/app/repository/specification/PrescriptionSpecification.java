@@ -7,20 +7,18 @@ import java.util.Date;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import app.model.Visit;
-import app.model.VisitStatus;
-import app.repository.specification.request.VisitRequest;
+import app.model.Prescription;
+import app.repository.specification.request.PrescriptionRequest;
 
 @Component
-public class VisitSpecification extends BaseSpecification<Visit, VisitRequest> {
+public class PrescriptionSpecification extends BaseSpecification<Prescription, PrescriptionRequest> {
 
     @Override
-    public Specification<Visit> getFilter(VisitRequest request) {
+    public Specification<Prescription> getFilter(PrescriptionRequest request) {
         return (root, query, cb) -> {
             query.distinct(true);
             return where(dateGreater(request.getFrom())
                     .and(dateLower(request.getTo()))
-                    .and(statusEquals(request.getVisitStatus()))
                     .and(idEquals("patient", request.getPatientId())))
                     .and(idEquals("doctor", request.getDoctorId()))
                     .and(idEquals("healthcareUnit", request.getHealthcareUnitId()))
@@ -28,16 +26,7 @@ public class VisitSpecification extends BaseSpecification<Visit, VisitRequest> {
         };
     }
 
-    private Specification<Visit> statusEquals(VisitStatus value) {
-        return (root, query, cb) -> {
-            if (value == null) {
-                return null;
-            }
-            return cb.equal(root.get("visitStatus"), value);
-        };
-    }
-
-    private Specification<Visit> idEquals(String idName, Integer value) {
+    private Specification<Prescription> idEquals(String idName, Integer value) {
         return (root, query, cb) -> {
             if (value == null) {
                 return null;
@@ -46,22 +35,22 @@ public class VisitSpecification extends BaseSpecification<Visit, VisitRequest> {
         };
     }
 
-    private Specification<Visit> dateLower(Date value) {
+    private Specification<Prescription> dateLower(Date value) {
 
         return (root, query, cb) -> {
             if (value == null) {
                 return null;
             }
-            return cb.lessThanOrEqualTo(root.get("visitDate"), value);
+            return cb.lessThanOrEqualTo(root.get("expirationDate"), value);
         };
     }
 
-    private Specification<Visit> dateGreater(Date value) {
+    private Specification<Prescription> dateGreater(Date value) {
         return (root, query, cb) -> {
             if (value == null) {
                 return null;
             }
-            return cb.greaterThanOrEqualTo(root.get("visitDate"), value);
+            return cb.greaterThanOrEqualTo(root.get("dateOfIssue"), value);
         };
     }
 }

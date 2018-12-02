@@ -1,4 +1,4 @@
-package app.repository.specification;
+package app.repository.specification.request;
 
 import java.util.Date;
 

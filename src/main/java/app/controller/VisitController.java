@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import app.model.Visit;
 import app.model.VisitStatus;
 import app.repository.VisitRepository;
-import app.repository.specification.VisitRequest;
 import app.repository.specification.VisitSpecification;
+import app.repository.specification.request.VisitRequest;
 
 @RestController
 @RequestMapping("/visit")
