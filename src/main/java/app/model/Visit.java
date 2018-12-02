@@ -30,7 +30,7 @@ public class Visit {
     private Doctor doctor;
     @OneToOne
     private HealthcareUnit healthcareUnit;
-    @Column(name = "visit_date")
+    @Column(name = "date")
     private Date visitDate;
     @Column(name = "symptoms")
     private String symptoms;

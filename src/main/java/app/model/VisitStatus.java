@@ -1,5 +1,5 @@
 package app.model;
 
 public enum VisitStatus {
-    AWATING, FINISHED, CANCELLED
+    AWAITING, FINISHED, CANCELLED
 }
