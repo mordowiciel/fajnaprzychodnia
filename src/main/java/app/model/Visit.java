@@ -52,6 +52,18 @@ public class Visit {
     }
 
     public Visit(int id, Patient patient, Doctor doctor, HealthcareUnit healthcareUnit, Date visitDate,
+                 String symptoms, String diagnosis, VisitStatus visitStatus) {
+        this.id = id;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.healthcareUnit = healthcareUnit;
+        this.visitDate = visitDate;
+        this.symptoms = symptoms;
+        this.diagnosis = diagnosis;
+        this.visitStatus = visitStatus;
+    }
+
+    public Visit(int id, Patient patient, Doctor doctor, HealthcareUnit healthcareUnit, Date visitDate,
                  String symptoms, String diagnosis, List<Prescription> prescriptions, VisitStatus visitStatus) {
         this.id = id;
         this.patient = patient;
