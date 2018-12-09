@@ -1,6 +1,6 @@
 package app.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -31,7 +31,7 @@ public class Visit {
     @OneToOne
     private HealthcareUnit healthcareUnit;
     @Column(name = "date")
-    private Date visitDate;
+    private LocalDateTime visitDate;
     @Column(name = "symptoms")
     private String symptoms;
     @Column(name = "diagnosis")
@@ -51,7 +51,7 @@ public class Visit {
 
     }
 
-    public Visit(int id, Patient patient, Doctor doctor, HealthcareUnit healthcareUnit, Date visitDate,
+    public Visit(int id, Patient patient, Doctor doctor, HealthcareUnit healthcareUnit, LocalDateTime visitDate,
                  String symptoms, String diagnosis, VisitStatus visitStatus) {
         this.id = id;
         this.patient = patient;
@@ -63,7 +63,7 @@ public class Visit {
         this.visitStatus = visitStatus;
     }
 
-    public Visit(int id, Patient patient, Doctor doctor, HealthcareUnit healthcareUnit, Date visitDate,
+    public Visit(int id, Patient patient, Doctor doctor, HealthcareUnit healthcareUnit, LocalDateTime visitDate,
                  String symptoms, String diagnosis, List<Prescription> prescriptions, VisitStatus visitStatus) {
         this.id = id;
         this.patient = patient;
@@ -108,11 +108,11 @@ public class Visit {
         this.healthcareUnit = healthcareUnit;
     }
 
-    public Date getVisitDate() {
+    public LocalDateTime getVisitDate() {
         return visitDate;
     }
 
-    public void setVisitDate(Date visitDate) {
+    public void setVisitDate(LocalDateTime visitDate) {
         this.visitDate = visitDate;
     }
 

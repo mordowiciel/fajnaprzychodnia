@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import app.model.WeekDay;
 import app.service.TimeIntervalService;
 
 @RunWith(SpringRunner.class)
@@ -71,6 +74,33 @@ public class TimeIntervalServiceTest {
 
         List<LocalTime> intervals = timeIntervalService.getTimeIntervals(start, end, MINUTES_INTERVAL);
         assertEquals(expectedIntervals, intervals);
+    }
+
+    @Test
+    public void shouldReturnMondayAsWeekDay() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2018, Calendar.DECEMBER, 10);
+        Date date = calendar.getTime();
+        WeekDay returnedWeekday = timeIntervalService.getWeekdayFromDate(date);
+        assertEquals(WeekDay.MONDAY, returnedWeekday);
+    }
+
+    @Test
+    public void shouldReturnThursdayAsWeekDay() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2018, Calendar.DECEMBER, 13);
+        Date date = calendar.getTime();
+        WeekDay returnedWeekday = timeIntervalService.getWeekdayFromDate(date);
+        assertEquals(WeekDay.THURSDAY, returnedWeekday);
+    }
+
+    @Test
+    public void shouldReturnSundayAsWeekDay() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2018, Calendar.DECEMBER, 9);
+        Date date = calendar.getTime();
+        WeekDay returnedWeekday = timeIntervalService.getWeekdayFromDate(date);
+        assertEquals(WeekDay.SUNDAY, returnedWeekday);
     }
 
 }

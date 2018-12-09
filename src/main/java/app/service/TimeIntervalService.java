@@ -3,9 +3,13 @@ package app.service;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import app.model.WeekDay;
 
 @Service
 public class TimeIntervalService {
@@ -30,5 +34,11 @@ public class TimeIntervalService {
         }
 
         return timeIntervals;
+    }
+
+    public WeekDay getWeekdayFromDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return WeekDay.values()[calendar.get(Calendar.DAY_OF_WEEK) - 1];
     }
 }

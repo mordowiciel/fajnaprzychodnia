@@ -1,12 +1,14 @@
 package app.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -35,12 +37,16 @@ public class Doctor {
     @Column(name="phone_number")
     private String phoneNumber;
 
+    @OneToMany(mappedBy = "doctor")
+    private List<WorkingHours> workingHours;
+
     public Doctor() {
 
     }
 
     public Doctor(int id, String email, String password, HealthcareUnit healthcareUnit, String firstName,
-                  String lastName, Date birthDate, String pesel, String phoneNumber) {
+                  String lastName, Date birthDate, String pesel, String phoneNumber,
+                  List<WorkingHours> workingHours) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -50,6 +56,7 @@ public class Doctor {
         this.birthDate = birthDate;
         this.pesel = pesel;
         this.phoneNumber = phoneNumber;
+        this.workingHours = workingHours;
     }
 
     public int getId() {
@@ -122,5 +129,13 @@ public class Doctor {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<WorkingHours> getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(List<WorkingHours> workingHours) {
+        this.workingHours = workingHours;
     }
 }
