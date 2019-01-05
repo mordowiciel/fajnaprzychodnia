@@ -1,5 +1,6 @@
 package app.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,16 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.model.Patient;
+import app.model.PatientRegisterDto;
 import app.model.Prescription;
 import app.model.Visit;
 import app.model.VisitStatus;
+import app.model.security.Authority;
+import app.model.security.AuthorityName;
+import app.model.security.User;
 import app.repository.PatientRepository;
 import app.repository.PrescriptionRepository;
 import app.repository.VisitRepository;
@@ -24,13 +32,19 @@ import app.repository.specification.PrescriptionSpecification;
 import app.repository.specification.VisitSpecification;
 import app.repository.specification.request.PrescriptionRequest;
 import app.repository.specification.request.VisitRequest;
+import app.security.JwtUser;
+import app.security.repository.AuthorityRepository;
+import app.security.repository.UserRepository;
 
 @RestController()
-@RequestMapping(value = "/patient")
+//@RequestMapping(value = "/patient")
 public class PatientController {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private PrescriptionRepository prescriptionRepository;
@@ -42,7 +56,13 @@ public class PatientController {
     @Autowired
     private VisitSpecification visitSpecification;
 
-    @RequestMapping(value = "/allPatients", method = RequestMethod.GET)
+    @Autowired
+    private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @RequestMapping(value = "/patients/allPatients", method = RequestMethod.GET)
     public ResponseEntity allPatients() {
         List<Patient> patients = patientRepository.findAll();
         return ResponseEntity
@@ -50,7 +70,7 @@ public class PatientController {
                 .body(patients);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/patients/{id}", method = RequestMethod.GET)
     public ResponseEntity getPatientInfo(@PathVariable(value = "id") Integer patientId) {
         Patient patientInfo = patientRepository.findById(patientId).get();
         return ResponseEntity
@@ -58,7 +78,7 @@ public class PatientController {
                 .body(patientInfo);
     }
 
-    @RequestMapping(value = "/{id}/prescriptions", method = RequestMethod.GET)
+    @RequestMapping(value = "/patients/{id}/prescriptions", method = RequestMethod.GET)
     public ResponseEntity getPatientPrescriptions(
             @PathVariable(value = "id") Integer patientId,
             @RequestParam(value = "doctorId", required = false) Integer doctorId,
@@ -76,7 +96,7 @@ public class PatientController {
                 .body(patientPrescriptions);
     }
 
-    @RequestMapping(value = "/{id}/visits", method = RequestMethod.GET)
+    @RequestMapping(value = "/patients/{id}/visits", method = RequestMethod.GET)
     public ResponseEntity getPatientVisits(
             @PathVariable(value = "id") Integer patientId,
             @RequestParam(value = "status", required = false) VisitStatus visitStatus,
@@ -92,5 +112,53 @@ public class PatientController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(prescriptions);
+    }
+
+    // TODO: return DTO
+    @RequestMapping(path = "/me", method = RequestMethod.GET)
+    public ResponseEntity userProfile() {
+
+        JwtUser principalID = (JwtUser) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        User user = new User();
+        user.setId(principalID.getId());
+        Patient patient = patientRepository.findByUser(user);
+
+        return ResponseEntity.ok(patient.getFirstName());
+
+    }
+
+    @RequestMapping(path = "/register", method = RequestMethod.POST)
+    public ResponseEntity registerUser(@RequestBody PatientRegisterDto userRegisterRequest) {
+
+        User userToRegister = new User();
+        userToRegister.setUsername(userRegisterRequest.username);
+        userToRegister.setFirstname(userRegisterRequest.firstName);
+        userToRegister.setLastname(userRegisterRequest.lastName);
+        userToRegister.setPassword(passwordEncoder.encode(userRegisterRequest.password));
+        userToRegister.setEmail(userRegisterRequest.email);
+
+        List<Authority> userAuthorities = new ArrayList<>();
+        userAuthorities.add(authorityRepository.findByName(AuthorityName.ROLE_USER));
+
+        userToRegister.setAuthorities(userAuthorities);
+        userToRegister.setEnabled(true);
+        userToRegister.setLastPasswordResetDate(new Date());
+        userToRegister = userRepository.save(userToRegister);
+
+        Patient patient = new Patient();
+        patient.setFirstName(userRegisterRequest.firstName);
+        patient.setLastName(userRegisterRequest.lastName);
+        patient.setEmail(userRegisterRequest.email);
+        patient.setPassword(userRegisterRequest.password);
+        patient.setBirthDate(userRegisterRequest.birthDate);
+        patient.setPesel(userRegisterRequest.pesel);
+        patient.setPhoneNumber(userRegisterRequest.phoneNumber);
+        patient.setUserData(userToRegister);
+
+        patientRepository.save(patient);
+        return ResponseEntity.ok("Patient created successfully!");
     }
 }

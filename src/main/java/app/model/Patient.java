@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import app.model.security.User;
 
 @Entity
 @Table(name="patient")
@@ -31,6 +34,9 @@ public class Patient {
     private String pesel;
     @Column(name="phone_number")
     private String phoneNumber;
+
+    @OneToOne
+    private User user;
 
     public Patient() {
 
@@ -110,5 +116,13 @@ public class Patient {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public User getUserData() {
+        return user;
+    }
+
+    public void setUserData(User userData) {
+        this.user = userData;
     }
 }
