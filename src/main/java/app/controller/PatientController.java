@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.model.DtoMapper;
-import app.model.entity.Patient;
 import app.model.dto.PatientRegisterDto;
-import app.model.entity.VisitStatus;
 import app.model.dto.PatientViewDto;
 import app.model.dto.PrescriptionDto;
 import app.model.dto.VisitDto;
+import app.model.entity.Patient;
+import app.model.entity.VisitStatus;
 import app.model.security.Authority;
 import app.model.security.AuthorityName;
 import app.model.security.User;
@@ -35,7 +34,6 @@ import app.repository.specification.PrescriptionSpecification;
 import app.repository.specification.VisitSpecification;
 import app.repository.specification.request.PrescriptionRequest;
 import app.repository.specification.request.VisitRequest;
-import app.security.JwtUser;
 import app.security.repository.AuthorityRepository;
 import app.security.repository.UserRepository;
 
@@ -122,20 +120,20 @@ public class PatientController {
                 .body(visitDtos);
     }
 
-    // TODO: return DTO
-    @RequestMapping(path = "/me", method = RequestMethod.GET)
-    public ResponseEntity userProfile() {
-
-        JwtUser principalID = (JwtUser) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-
-        User user = new User();
-        user.setId(principalID.getId());
-        Patient patient = patientRepository.findByUser(user);
-        return ResponseEntity.ok(patient.getFirstName());
-
-    }
+//    // TODO: return DTO
+//    @RequestMapping(path = "/me", method = RequestMethod.GET)
+//    public ResponseEntity userProfile() {
+//
+//        JwtUser principalID = (JwtUser) SecurityContextHolder.getContext()
+//                .getAuthentication()
+//                .getPrincipal();
+//
+//        User user = new User();
+//        user.setId(principalID.getId());
+//        Patient patient = patientRepository.findByUser(user);
+//        return ResponseEntity.ok(patient.getFirstName());
+//
+//    }
 
     // TODO: use builder
     @RequestMapping(path = "/register", method = RequestMethod.POST)

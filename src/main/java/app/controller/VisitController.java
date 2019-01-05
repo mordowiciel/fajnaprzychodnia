@@ -35,7 +35,6 @@ public class VisitController {
                 .body(visits);
     }
 
-    // TODO: trzeba dac date +1 do przodu, aby zalapalo przedzial
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity search(@RequestParam(value = "status", required = false) VisitStatus visitStatus,
                                  @RequestParam(value = "patientId", required = false) Integer patientId,

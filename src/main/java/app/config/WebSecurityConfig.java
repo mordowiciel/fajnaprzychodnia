@@ -99,7 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         HttpMethod.POST,
                         authenticationPath,
-                        "/patient/register"
+                        "/register"
                 )
                 // allow anonymous resource requests
                 .and()
