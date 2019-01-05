@@ -1,4 +1,4 @@
-package app.model;
+package app.model.entity;
 
 import java.util.Date;
 
@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import app.model.security.User;
 
 @Entity
 @Table(name="doctor")
@@ -34,6 +36,9 @@ public class Doctor {
     private String pesel;
     @Column(name="phone_number")
     private String phoneNumber;
+
+    @OneToOne
+    private User user;
 
     public Doctor() {
 
@@ -122,5 +127,13 @@ public class Doctor {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

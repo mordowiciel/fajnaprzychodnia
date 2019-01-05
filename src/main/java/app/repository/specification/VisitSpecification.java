@@ -7,8 +7,8 @@ import java.util.Date;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import app.model.Visit;
-import app.model.VisitStatus;
+import app.model.entity.Visit;
+import app.model.entity.VisitStatus;
 import app.repository.specification.request.VisitRequest;
 
 @Component

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.model.Doctor;
+import app.model.entity.Doctor;
 import app.repository.DoctorRepository;
 
 @RestController()

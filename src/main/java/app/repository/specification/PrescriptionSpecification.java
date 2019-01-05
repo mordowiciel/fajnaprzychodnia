@@ -7,7 +7,7 @@ import java.util.Date;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import app.model.Prescription;
+import app.model.entity.Prescription;
 import app.repository.specification.request.PrescriptionRequest;
 
 @Component

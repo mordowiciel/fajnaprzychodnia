@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.model.Visit;
-import app.model.VisitStatus;
+import app.model.entity.Visit;
+import app.model.entity.VisitStatus;
 import app.repository.VisitRepository;
 import app.repository.specification.VisitSpecification;
 import app.repository.specification.request.VisitRequest;
