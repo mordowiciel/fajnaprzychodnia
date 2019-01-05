@@ -2,7 +2,7 @@ package app.repository.specification.request;
 
 import java.util.Date;
 
-import app.model.entity.VisitStatus;
+import app.model.VisitStatus;
 
 public class VisitRequest {
     private Date from;

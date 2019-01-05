@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.model.VisitStatus;
 import app.model.dto.CancelVisitDto;
 import app.model.dto.RegisterVisitDto;
 import app.model.entity.Doctor;
 import app.model.entity.HealthcareUnit;
 import app.model.entity.Patient;
 import app.model.entity.Visit;
-import app.model.entity.VisitStatus;
 import app.model.security.User;
 import app.repository.DoctorRepository;
 import app.repository.HealthcareUnitRepository;

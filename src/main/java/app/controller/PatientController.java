@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.model.DtoMapper;
+import app.model.VisitStatus;
 import app.model.dto.PatientRegisterDto;
 import app.model.dto.PatientViewDto;
 import app.model.dto.PrescriptionDto;
 import app.model.dto.VisitDto;
 import app.model.entity.Patient;
-import app.model.entity.VisitStatus;
 import app.model.security.Authority;
 import app.model.security.AuthorityName;
 import app.model.security.User;

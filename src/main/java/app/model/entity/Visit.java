@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import app.model.VisitStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
