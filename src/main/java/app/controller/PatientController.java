@@ -156,7 +156,7 @@ public class PatientController {
         patient.setBirthDate(userRegisterRequest.birthDate);
         patient.setPesel(userRegisterRequest.pesel);
         patient.setPhoneNumber(userRegisterRequest.phoneNumber);
-        patient.setUserData(userToRegister);
+        patient.setUser(userToRegister);
 
         patientRepository.save(patient);
         return ResponseEntity.ok("Patient created successfully!");

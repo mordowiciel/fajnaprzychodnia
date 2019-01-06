@@ -1,7 +1,5 @@
 package app.model.dto;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -18,4 +16,5 @@ public class DoctorViewDto {
     private String lastName;
     private String email;
     private String phoneNumber;
+    private String specialisation;
 }

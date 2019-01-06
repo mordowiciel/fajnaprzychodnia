@@ -20,9 +20,9 @@ public class DtoMapper {
     public static PatientViewDto map(Patient patient) {
         return PatientViewDto.PatientViewDtoBuilder.builder()
                 .withId(patient.getId())
-                .withFirstName(patient.getUserData().getFirstname())
-                .withLastName(patient.getUserData().getLastname())
-                .withEmail(patient.getUserData().getEmail())
+                .withFirstName(patient.getUser().getFirstname())
+                .withLastName(patient.getUser().getLastname())
+                .withEmail(patient.getUser().getEmail())
                 .withBirthDate(patient.getBirthDate())
                 .withPesel(patient.getPesel())
                 .withPhoneNumber(patient.getPhoneNumber())
@@ -36,6 +36,7 @@ public class DtoMapper {
                 .lastName(doctor.getLastName())
                 .email(doctor.getEmail())
                 .phoneNumber(doctor.getPhoneNumber())
+                .specialisation(doctor.getSpecialisation())
                 .build();
     }
 
