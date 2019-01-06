@@ -34,7 +34,7 @@ public class VisitRequest {
         return visitStatus;
     }
 
-    public int getPatientId() {
+    public Integer getPatientId() {
         return patientId;
     }
 

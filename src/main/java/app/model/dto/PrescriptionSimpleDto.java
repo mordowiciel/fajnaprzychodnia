@@ -1,7 +1,6 @@
 package app.model.dto;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -17,13 +16,12 @@ import lombok.NoArgsConstructor;
 @JsonDeserialize
 @NoArgsConstructor
 @AllArgsConstructor
-public class VisitDto {
+public class PrescriptionSimpleDto {
     private int id;
-    private PatientViewDto patient;
-    private DoctorViewDto doctor;
-    private HealthcareUnitDto healthcareUnit;
-    private LocalDateTime visitDate;
-    private String symptoms;
-    private String diagnosis;
-    private List<PrescriptionSimpleDto> prescriptions;
+    private Integer patientId;
+    private Integer doctorId;
+    private Integer healthcareUnitId;
+    private Date dateOfIssue;
+    private Date expirationDate;
+    private String content;
 }

@@ -38,6 +38,7 @@ import app.security.repository.AuthorityRepository;
 import app.security.repository.UserRepository;
 
 @RestController()
+@RequestMapping(value = "/patient")
 public class PatientController {
 
     @Autowired
@@ -60,15 +61,8 @@ public class PatientController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @RequestMapping(value = "/patients/allPatients", method = RequestMethod.GET)
-    public ResponseEntity allPatients() {
-        List<Patient> patients = patientRepository.findAll();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(patients);
-    }
 
-    @RequestMapping(value = "/patients/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity getPatientInfo(@PathVariable(value = "id") Integer patientId) {
         Patient patientInfo = patientRepository.findById(patientId).get();
         PatientViewDto patientViewDto = DtoMapper.map(patientInfo);
@@ -77,7 +71,7 @@ public class PatientController {
                 .body(patientViewDto);
     }
 
-    @RequestMapping(value = "/patients/{id}/prescriptions", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/prescriptions", method = RequestMethod.GET)
     public ResponseEntity getPatientPrescriptions(
             @PathVariable(value = "id") Integer patientId,
             @RequestParam(value = "doctorId", required = false) Integer doctorId,
@@ -98,7 +92,7 @@ public class PatientController {
                 .body(patientPrescriptionDtos);
     }
 
-    @RequestMapping(value = "/patients/{id}/visits", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/visits", method = RequestMethod.GET)
     public ResponseEntity getPatientVisits(
             @PathVariable(value = "id") Integer patientId,
             @RequestParam(value = "status", required = false) VisitStatus visitStatus,

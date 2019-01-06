@@ -19,7 +19,7 @@ public class PrescriptionController {
     @Autowired
     PrescriptionRepository prescriptionRepository;
 
-    @RequestMapping(value = "/allVisits", method = RequestMethod.GET)
+    @RequestMapping(value = "/allPrescriptions", method = RequestMethod.GET)
     public ResponseEntity allPrescriptions() {
         List<Prescription> prescriptions = prescriptionRepository.findAll();
         return ResponseEntity

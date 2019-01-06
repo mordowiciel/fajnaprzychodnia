@@ -1,6 +1,6 @@
 package app.model.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -41,7 +41,7 @@ public class Visit {
     @OneToOne
     private HealthcareUnit healthcareUnit;
     @Column(name = "date")
-    private Date visitDate;
+    private LocalDateTime visitDate;
     @Column(name = "symptoms")
     private String symptoms;
     @Column(name = "diagnosis")

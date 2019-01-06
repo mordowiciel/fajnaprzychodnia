@@ -7,6 +7,7 @@ import app.model.dto.DoctorViewDto;
 import app.model.dto.HealthcareUnitDto;
 import app.model.dto.PatientViewDto;
 import app.model.dto.PrescriptionDto;
+import app.model.dto.PrescriptionSimpleDto;
 import app.model.dto.VisitDto;
 import app.model.entity.Doctor;
 import app.model.entity.HealthcareUnit;
@@ -60,11 +61,23 @@ public class DtoMapper {
                 .build();
     }
 
-    // TODO: redundancy in prescription? we're showing doctor and patient data again
+    public static PrescriptionSimpleDto map(PrescriptionDto prescriptionDto) {
+        return PrescriptionSimpleDto.builder()
+                .id(prescriptionDto.getId())
+                .patientId(prescriptionDto.getPatient().getId())
+                .doctorId(prescriptionDto.getDoctor().getId())
+                .healthcareUnitId(prescriptionDto.getHealthcareUnit().getId())
+                .dateOfIssue(prescriptionDto.getDateOfIssue())
+                .expirationDate(prescriptionDto.getExpirationDate())
+                .content(prescriptionDto.getContent())
+                .build();
+    }
+
     public static VisitDto map(Visit visit) {
 
-        List<PrescriptionDto> visitPrescriptions = visit.getPrescriptions()
+        List<PrescriptionSimpleDto> visitPrescriptions = visit.getPrescriptions()
                 .stream()
+                .map(DtoMapper::map)
                 .map(DtoMapper::map)
                 .collect(Collectors.toList());
 
