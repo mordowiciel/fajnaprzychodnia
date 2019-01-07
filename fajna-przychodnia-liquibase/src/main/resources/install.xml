@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="create-user-table" author="mordowiciel">
+        <createTable tableName="user">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey = "true" primaryKeyName="user_id_pkey"/>
+            </column>
+            <column name="username" type="TEXT"/>
+            <column name="email" type="TEXT"/>
+            <column name="firstname" type="TEXT"/>
+            <column name="lastname" type="TEXT"/>
+            <column name="password" type="TEXT"/>
+            <column name="lastpasswordresetdate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="enabled" type="BOOLEAN"/>
+        </createTable>
+
+        <insert tableName="user">
+            <column name="username" value="test_user"/>
+            <column name="email" value="testuser@test.com"/>
+            <column name="firstname" value="testName"/>
+            <column name="lastname" value="testLastname"/>
+            <!--test123-->
+            <column name="password" value="$2a$10$cadjP8ODr4XkbYDhtoHk4OaYvQ/IGh4a9rvn4CQzz1qV2GKPsPwgy"/>
+            <column name="lastpasswordresetdate" value="2019-01-07T15:19:21"/>
+            <column name="enabled" value="TRUE"/>
+        </insert>
+
+        <insert tableName="user">
+            <column name="username" value="test_doctor"/>
+            <column name="email" value="testdoctor@test.com"/>
+            <column name="firstname" value="testDoctorName"/>
+            <column name="lastname" value="testDoctorLastname"/>
+            <!--test123-->
+            <column name="password" value="$2a$10$cadjP8ODr4XkbYDhtoHk4OaYvQ/IGh4a9rvn4CQzz1qV2GKPsPwgy"/>
+            <column name="lastpasswordresetdate" value="2019-01-07T15:19:21"/>
+            <column name="enabled" value="TRUE"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="create-authority-table" author="mordowiciel">
+        <createTable tableName="authority">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey = "true" primaryKeyName="authority_id_pkey"/>
+            </column>
+            <column name="name" type="TEXT"/>
+        </createTable>
+        <insert tableName="authority">
+            <column name="id" value="1"></column>
+            <column name="name" value="ROLE_USER"></column>
+        </insert>
+        <insert tableName="authority">
+            <column name="id" value="2"></column>
+            <column name="name" value="ROLE_ADMIN"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="create-user-authority-table" author="mordowiciel">
+        <createTable tableName="user_authority">
+            <column name="user_id" type="BIGINT"/>
+            <column name="authority_id" type="BIGINT"/>
+        </createTable>
+
+        <addPrimaryKey constraintName="user_authority_pkey"
+                       tableName="user_authority"
+                       columnNames="user_id, authority_id" />
+
+        <addForeignKeyConstraint constraintName="user_authority_user_id_fkey"
+                                 baseColumnNames="user_id" baseTableName="user_authority"
+                                 referencedTableName="user" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+        <addForeignKeyConstraint constraintName="user_authority_authority_id_fkey"
+                                 baseColumnNames="authority_id" baseTableName="user_authority"
+                                 referencedTableName="authority" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+
+        <insert tableName="user_authority">
+            <column name="user_id" value="1"/>
+            <column name="authority_id" value="1"/>
+        </insert>
+        <insert tableName="user_authority">
+            <column name="user_id" value="2"/>
+            <column name="authority_id" value="2"/>
+        </insert>
+
+    </changeSet>
+
+
+    <changeSet id="create-patient-table" author="mordowiciel">
+        <createTable tableName="patient">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey = "true" primaryKeyName="patient_id_pkey"/>
+            </column>
+            <column name="birth_date" type="DATE"/>
+            <column name="pesel" type="TEXT"/>
+            <column name="phone_number" type="TEXT"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="patient_user_id_fkey"
+                                 baseColumnNames="user_id" baseTableName="patient"
+                                 referencedTableName="user" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+
+        <insert tableName="patient">
+            <column name="birth_date" value="1995-11-28"/>
+            <column name="pesel" value="95112800000"/>
+            <column name="phone_number" value="000000000"/>
+            <column name="user_id" value="1"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="create-doctor-table" author="mordowiciel">
+        <createTable tableName="doctor">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey = "true" primaryKeyName="doctor_id_pkey"/>
+            </column>
+            <column name="birth_date" type="DATE"/>
+            <column name="pesel" type="TEXT"/>
+            <column name="phone_number" type="TEXT"/>
+            <column name="user_id" type="BIGSERIAL"/>
+            <column name="specialisation" type="TEXT"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="doctor_user_id_fkey"
+                                 baseColumnNames="user_id" baseTableName="doctor"
+                                 referencedTableName="user" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+
+        <insert tableName="doctor">
+            <column name="birth_date" value="1995-11-28"/>
+            <column name="pesel" value="95112800000"/>
+            <column name="phone_number" value="000000000"/>
+            <column name="specialisation" value="oncologist"/>
+            <column name="user_id" value="2"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="create-healthcare-unit-table" author="mordowiciel">
+        <createTable tableName="healthcare_unit">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey = "true" primaryKeyName="healthcare_unit_id_pkey"/>
+            </column>
+            <column name="unit_name" type="TEXT"/>
+            <column name="address" type="TEXT"/>
+            <column name="postal_code" type="TEXT"/>
+            <column name="city" type="TEXT"/>
+        </createTable>
+
+        <insert tableName="healthcare_unit">
+            <column name="unit_name" value="InfoSyf"/>
+            <column name="address" value="Rondo Solidarnosci 1"/>
+            <column name="postal_code" value="91-000"/>
+            <column name="city" value="Lodz"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="create-prescription-table" author="mordowiciel">
+        <createTable tableName="prescription">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey = "true" primaryKeyName="prescription_id_pkey"/>
+            </column>
+            <column name="patient_id" type="INTEGER"/>
+            <column name="doctor_id" type="INTEGER"/>
+            <column name="healthcare_unit_id" type="INTEGER"/>
+            <column name="date_of_issue" type="DATE"/>
+            <column name="date_of_expiration" type="DATE"/>
+            <column name="content" type="TEXT"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="prescription_patient_id_fkey"
+                                 baseColumnNames="patient_id" baseTableName="prescription"
+                                 referencedTableName="patient" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+        <addForeignKeyConstraint constraintName="prescription_doctor_id_fkey"
+                                 baseColumnNames="doctor_id" baseTableName="prescription"
+                                 referencedTableName="doctor" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+        <addForeignKeyConstraint constraintName="prescription_healthcare_unit_id_fkey"
+                                 baseColumnNames="healthcare_unit_id" baseTableName="prescription"
+                                 referencedTableName="healthcare_unit" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+
+        <insert tableName="prescription">
+            <column name="patient_id" value="1"/>
+            <column name="doctor_id" value="1"/>
+            <column name="healthcare_unit_id" value="1"/>
+            <column name="date_of_issue" value="2019-07-01"/>
+            <column name="date_of_expiration" value="2020-07-01"/>
+            <column name="content" value="xanax 5000mg, marijuana 10g weekly"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="create-visit-table" author="mordowiciel">
+        <createTable tableName="visit">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey = "true" primaryKeyName="visit_id_pkey"/>
+            </column>
+            <column name="patient_id" type="INTEGER"/>
+            <column name="doctor_id" type="INTEGER"/>
+            <column name="healthcare_unit_id" type="INTEGER"/>
+            <column name="date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="symptoms" type="TEXT"/>
+            <column name="diagnosis" type="TEXT"/>
+            <column name="status" type="TEXT"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="visit_patient_id_fkey"
+                                 baseColumnNames="patient_id" baseTableName="prescription"
+                                 referencedTableName="patient" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+        <addForeignKeyConstraint constraintName="visit_doctor_id_fkey"
+                                 baseColumnNames="doctor_id" baseTableName="prescription"
+                                 referencedTableName="doctor" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+        <addForeignKeyConstraint constraintName="visit_healthcare_unit_id_fkey"
+                                 baseColumnNames="healthcare_unit_id" baseTableName="prescription"
+                                 referencedTableName="healthcare_unit" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+
+        <insert tableName="visit">
+            <column name="patient_id" value="1"/>
+            <column name="doctor_id" value="1"/>
+            <column name="healthcare_unit_id" value="1"/>
+            <column name="date" value="2018-11-15T07:30:20"/>
+            <column name="symptoms" value="kill me plz"/>
+            <column name="diagnosis" value="anxiety, depression"/>
+            <column name="status" value="FINISHED"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="create-visit-prescription-table" author="mordowiciel">
+        <createTable tableName="visit_prescription">
+            <column name="visit_id" type="INTEGER"/>
+            <column name="prescription_id" type="INTEGER"/>
+        </createTable>
+        <addPrimaryKey constraintName="visit_prescription_pkey"
+                       tableName="visit_prescription"
+                       columnNames="visit_id, prescription_id" />
+        <addForeignKeyConstraint constraintName="visit_prescription_visit_id_fkey"
+                                 baseColumnNames="visit_id" baseTableName="visit_prescription"
+                                 referencedTableName="visit" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+        <addForeignKeyConstraint constraintName="visit_prescription_prescription_id_fkey"
+                                 baseColumnNames="prescription_id" baseTableName="visit_prescription"
+                                 referencedTableName="prescription" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+        <insert tableName="visit_prescription">
+            <column name="visit_id" value="1"/>
+            <column name="prescription_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="create-working-hours-table" author="mordowiciel">
+        <createTable tableName="working_hours">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey = "true" primaryKeyName="working_hours_id_pkey"/>
+            </column>
+            <column name="shift_start" type="TIME WITHOUT TIME ZONE"/>
+            <column name="shift_end" type="TIME WITHOUT TIME ZONE"/>
+            <column name="week_day" type="SMALLINT"/>
+            <column name="doctor_id" type="INTEGER"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="working_hours_doctor_id_fkey"
+                                 baseColumnNames="doctor_id" baseTableName="working_hours"
+                                 referencedTableName="doctor" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+        <insert tableName="working_hours">
+            <column name="shift_start" value="10:30:00"/>
+            <column name="shift_end" value="12:00:00"/>
+            <column name="week_day" value="0"/>
+            <column name="doctor_id" value="1"/>
+        </insert>
+        <insert tableName="working_hours">
+            <column name="shift_start" value="12:30:00"/>
+            <column name="shift_end" value="14:00:00"/>
+            <column name="week_day" value="3"/>
+            <column name="doctor_id" value="1"/>
+        </insert>
+        <insert tableName="working_hours">
+            <column name="shift_start" value="08:30:00"/>
+            <column name="shift_end" value="10:00:00"/>
+            <column name="week_day" value="4"/>
+            <column name="doctor_id" value="1"/>
+        </insert>
+        <insert tableName="working_hours">
+            <column name="shift_start" value="12:30:00"/>
+            <column name="shift_end" value="13:30:00"/>
+            <column name="week_day" value="6"/>
+            <column name="doctor_id" value="1"/>
+            </insert>
+    </changeSet>
+
+    <!--<changeSet id="create-doctor-working-hours-table" author="mordowiciel">-->
+        <!--<createTable tableName="doctor_working_hours">-->
+            <!--<column name="doctor_id" type="INTEGER"/>-->
+            <!--<column name="working_hours_id" type="INTEGER"/>-->
+        <!--</createTable>-->
+
+        <!--<addPrimaryKey constraintName="doctor_working_hours_pkey"-->
+                       <!--tableName="doctor_working_hours"-->
+                       <!--columnNames="doctor_id, working_hours_id" />-->
+
+        <!--<addForeignKeyConstraint constraintName="doctor_working_hours_doctor_id_fkey"-->
+                                 <!--baseColumnNames="doctor_id" baseTableName="doctor_working_hours"-->
+                                 <!--referencedTableName="doctor" referencedColumnNames="id"-->
+                                 <!--onUpdate="CASCADE" onDelete="CASCADE"/>-->
+        <!--<addForeignKeyConstraint constraintName="doctor_working_hours_working_hours_id_fkey"-->
+                                 <!--baseColumnNames="working_hours_id" baseTableName="doctor_working_hours"-->
+                                 <!--referencedTableName="working_hours" referencedColumnNames="id"-->
+                                 <!--onUpdate="CASCADE" onDelete="CASCADE"/>-->
+
+    <!--</changeSet>-->
+
+</databaseChangeLog>

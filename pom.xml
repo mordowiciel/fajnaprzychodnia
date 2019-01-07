@@ -6,7 +6,11 @@
 
     <groupId>com.pp</groupId>
     <artifactId>fajna-przychodnia</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>fajna-przychodnia-liquibase</module>
+    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
