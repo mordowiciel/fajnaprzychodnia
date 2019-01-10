@@ -90,6 +90,24 @@
 
     </changeSet>
 
+    <changeSet id="create-healthcare-unit-table" author="mordowiciel">
+        <createTable tableName="healthcare_unit">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="healthcare_unit_id_pkey"/>
+            </column>
+            <column name="unit_name" type="TEXT"/>
+            <column name="address" type="TEXT"/>
+            <column name="postal_code" type="TEXT"/>
+            <column name="city" type="TEXT"/>
+        </createTable>
+
+        <insert tableName="healthcare_unit">
+            <column name="unit_name" value="InfoSyf"/>
+            <column name="address" value="Rondo Solidarnosci 1"/>
+            <column name="postal_code" value="91-000"/>
+            <column name="city" value="Lodz"/>
+        </insert>
+    </changeSet>
 
     <changeSet id="create-patient-table" author="mordowiciel">
         <createTable tableName="patient">
@@ -123,12 +141,17 @@
             <column name="birth_date" type="DATE"/>
             <column name="pesel" type="TEXT"/>
             <column name="phone_number" type="TEXT"/>
-            <column name="user_id" type="BIGSERIAL"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="healthcare_unit_id" type="BIGINT"/>
             <column name="specialisation" type="TEXT"/>
         </createTable>
         <addForeignKeyConstraint constraintName="doctor_user_id_fkey"
                                  baseColumnNames="user_id" baseTableName="doctor"
                                  referencedTableName="user" referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+        <addForeignKeyConstraint constraintName="doctor_healthcare_unit_id_fkey"
+                                 baseColumnNames="healthcare_unit_id" baseTableName="doctor"
+                                 referencedTableName="healthcare_unit" referencedColumnNames="id"
                                  onUpdate="CASCADE" onDelete="CASCADE"/>
 
         <insert tableName="doctor">
@@ -137,26 +160,6 @@
             <column name="phone_number" value="000000000"/>
             <column name="specialisation" value="oncologist"/>
             <column name="user_id" value="2"/>
-        </insert>
-
-    </changeSet>
-
-    <changeSet id="create-healthcare-unit-table" author="mordowiciel">
-        <createTable tableName="healthcare_unit">
-            <column name="id" type="SERIAL">
-                <constraints primaryKey = "true" primaryKeyName="healthcare_unit_id_pkey"/>
-            </column>
-            <column name="unit_name" type="TEXT"/>
-            <column name="address" type="TEXT"/>
-            <column name="postal_code" type="TEXT"/>
-            <column name="city" type="TEXT"/>
-        </createTable>
-
-        <insert tableName="healthcare_unit">
-            <column name="unit_name" value="InfoSyf"/>
-            <column name="address" value="Rondo Solidarnosci 1"/>
-            <column name="postal_code" value="91-000"/>
-            <column name="city" value="Lodz"/>
         </insert>
 
     </changeSet>

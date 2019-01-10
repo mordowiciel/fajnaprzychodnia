@@ -114,51 +114,32 @@ public class PatientController {
                 .body(visitDtos);
     }
 
-//    // TODO: return DTO
-//    @RequestMapping(path = "/me", method = RequestMethod.GET)
-//    public ResponseEntity userProfile() {
-//
-//        JwtUser principalID = (JwtUser) SecurityContextHolder.getContext()
-//                .getAuthentication()
-//                .getPrincipal();
-//
-//        User user = new User();
-//        user.setId(principalID.getId());
-//        Patient patient = patientRepository.findByUser(user);
-//        return ResponseEntity.ok(patient.getFirstName());
-//
-//    }
-
-    // TODO: use builder
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public ResponseEntity registerUser(@RequestBody PatientRegisterDto userRegisterRequest) {
-
-        User userToRegister = new User();
-        userToRegister.setUsername(userRegisterRequest.username);
-        userToRegister.setFirstname(userRegisterRequest.firstName);
-        userToRegister.setLastname(userRegisterRequest.lastName);
-        userToRegister.setPassword(passwordEncoder.encode(userRegisterRequest.password));
-        userToRegister.setEmail(userRegisterRequest.email);
 
         List<Authority> userAuthorities = new ArrayList<>();
         userAuthorities.add(authorityRepository.findByName(AuthorityName.ROLE_USER));
 
-        userToRegister.setAuthorities(userAuthorities);
-        userToRegister.setEnabled(true);
-        userToRegister.setLastPasswordResetDate(new Date());
+        User userToRegister = User.builder()
+                .username(userRegisterRequest.username)
+                .email(userRegisterRequest.email)
+                .firstname(userRegisterRequest.firstName)
+                .lastname(userRegisterRequest.lastName)
+                .password(passwordEncoder.encode(userRegisterRequest.password))
+                .authorities(userAuthorities)
+                .enabled(true)
+                .lastPasswordResetDate(new Date())
+                .build();
         userToRegister = userRepository.save(userToRegister);
 
-        Patient patient = new Patient();
-        patient.setFirstName(userRegisterRequest.firstName);
-        patient.setLastName(userRegisterRequest.lastName);
-        patient.setEmail(userRegisterRequest.email);
-        patient.setPassword(userRegisterRequest.password);
-        patient.setBirthDate(userRegisterRequest.birthDate);
-        patient.setPesel(userRegisterRequest.pesel);
-        patient.setPhoneNumber(userRegisterRequest.phoneNumber);
-        patient.setUser(userToRegister);
-
+        Patient patient = Patient.builder()
+                .birthDate(userRegisterRequest.birthDate)
+                .pesel(userRegisterRequest.pesel)
+                .phoneNumber(userRegisterRequest.phoneNumber)
+                .user(userToRegister)
+                .build();
         patientRepository.save(patient);
+
         return ResponseEntity.ok("Patient created successfully!");
     }
 }

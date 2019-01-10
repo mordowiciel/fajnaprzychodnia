@@ -7,8 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import app.model.entity.Doctor;
 import app.model.entity.HealthcareUnit;
+import app.model.security.User;
 
 @Repository("doctorRepository")
 public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
     List<Doctor> findByHealthcareUnit(HealthcareUnit healthcareUnit);
+
+    Doctor findByUser(User user);
 }

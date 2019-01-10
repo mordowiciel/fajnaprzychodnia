@@ -2,6 +2,7 @@ package app.repository.specification;
 
 import static org.springframework.data.jpa.domain.Specification.where;
 
+import java.time.ZoneId;
 import java.util.Date;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -52,7 +53,7 @@ public class VisitSpecification extends BaseSpecification<Visit, VisitRequest> {
             if (value == null) {
                 return null;
             }
-            return cb.lessThanOrEqualTo(root.get("visitDate"), value);
+            return cb.lessThanOrEqualTo(root.get("visitDate"), value.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         };
     }
 
@@ -61,7 +62,7 @@ public class VisitSpecification extends BaseSpecification<Visit, VisitRequest> {
             if (value == null) {
                 return null;
             }
-            return cb.greaterThanOrEqualTo(root.get("visitDate"), value);
+            return cb.greaterThanOrEqualTo(root.get("visitDate"), value.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         };
     }
 }

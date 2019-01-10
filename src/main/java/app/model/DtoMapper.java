@@ -32,9 +32,9 @@ public class DtoMapper {
     public static DoctorViewDto map(Doctor doctor) {
         return DoctorViewDto.builder()
                 .id(doctor.getId())
-                .firstName(doctor.getFirstName())
-                .lastName(doctor.getLastName())
-                .email(doctor.getEmail())
+                .firstName(doctor.getUser().getFirstname())
+                .lastName(doctor.getUser().getLastname())
+                .email(doctor.getUser().getEmail())
                 .phoneNumber(doctor.getPhoneNumber())
                 .specialisation(doctor.getSpecialisation())
                 .build();

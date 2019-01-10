@@ -1,7 +1,12 @@
 package app.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,12 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.model.dto.DoctorProfileDto;
 import app.model.dto.PatientProfileDto;
 import app.model.dto.UpdatePasswordDto;
 import app.model.dto.UpdateProfileDto;
 import app.model.dto.UserUpdatedResponseDto;
+import app.model.entity.Doctor;
 import app.model.entity.Patient;
+import app.model.security.AuthorityName;
 import app.model.security.User;
+import app.repository.DoctorRepository;
 import app.repository.PatientRepository;
 import app.security.JwtTokenUtil;
 import app.security.JwtUser;
@@ -26,8 +35,14 @@ import app.security.repository.UserRepository;
 @RequestMapping("/me")
 public class ProfileController {
 
+    private SimpleGrantedAuthority patientAuthority = new SimpleGrantedAuthority(AuthorityName.ROLE_USER.toString());
+    private SimpleGrantedAuthority doctorAuthority = new SimpleGrantedAuthority(AuthorityName.ROLE_ADMIN.toString());
+
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private DoctorRepository doctorRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -41,24 +56,43 @@ public class ProfileController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity getProfileInfo() {
 
-        JwtUser principalID = (JwtUser) SecurityContextHolder.getContext()
+        JwtUser principal = (JwtUser) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
-        User user = userRepository.findById(principalID.getId()).get();
-        Patient patient = patientRepository.findByUser(user);
+        User user = userRepository.findById(principal.getId()).get();
+        Collection<? extends GrantedAuthority> authorities = principal.getAuthorities();
 
-        PatientProfileDto profileDto = PatientProfileDto.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .firstName(user.getFirstname())
-                .lastName(user.getLastname())
-                .birthDate(patient.getBirthDate())
-                .pesel(patient.getPesel())
-                .phoneNumber(patient.getPhoneNumber())
-                .build();
+        if (authorities.contains(patientAuthority)) {
+            Patient patient = patientRepository.findByUser(user);
+            PatientProfileDto profileDto = PatientProfileDto.builder()
+                    .id(user.getId())
+                    .username(user.getUsername())
+                    .email(user.getEmail())
+                    .firstName(user.getFirstname())
+                    .lastName(user.getLastname())
+                    .birthDate(patient.getBirthDate())
+                    .pesel(patient.getPesel())
+                    .phoneNumber(patient.getPhoneNumber())
+                    .build();
+            return ResponseEntity.ok(profileDto);
+        } else if (authorities.contains(doctorAuthority)) {
+            Doctor doctor = doctorRepository.findByUser(user);
+            DoctorProfileDto profileDto = DoctorProfileDto.builder()
+                    .id(user.getId())
+                    .username(user.getUsername())
+                    .email(user.getEmail())
+                    .firstName(user.getFirstname())
+                    .lastName(user.getLastname())
+                    .birthDate(doctor.getBirthDate())
+                    .pesel(doctor.getPesel())
+                    .phoneNumber(doctor.getPhoneNumber())
+                    .specialisation(doctor.getSpecialisation())
+                    .build();
+            return ResponseEntity.ok(profileDto);
+        }
 
-        return ResponseEntity.ok(profileDto);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body("No proper authority found");
     }
 
     // TODO: update na profilu się pierdoli, do rozkminki
