@@ -3,6 +3,7 @@ package app.controller;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -81,6 +82,11 @@ public class DoctorController {
         Doctor doctor = doctorRepository.findById(doctorId).get();
 
         WorkingHours workingHoursInGivenDay = workingHoursRepository.findByWeekDayAndDoctor(weekDay, doctor);
+        if (workingHoursInGivenDay == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ArrayList<>());
+        }
         List<LocalTime> visitTimesInWorkingHours = timeIntervalService.getTimeIntervals(
                 workingHoursInGivenDay.getShiftStart(),
                 workingHoursInGivenDay.getShiftEnd(),
