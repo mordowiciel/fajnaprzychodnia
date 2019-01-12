@@ -1,5 +1,6 @@
 package app.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,11 +77,14 @@ public class DtoMapper {
 
     public static VisitDto map(Visit visit) {
 
-        List<PrescriptionSimpleDto> visitPrescriptions = visit.getPrescriptions()
-                .stream()
-                .map(DtoMapper::map)
-                .map(DtoMapper::map)
-                .collect(Collectors.toList());
+        List<PrescriptionSimpleDto> visitPrescriptions = new ArrayList<>();
+        if (visit.getPrescriptions() != null) {
+            visitPrescriptions = visit.getPrescriptions()
+                    .stream()
+                    .map(DtoMapper::map)
+                    .map(DtoMapper::map)
+                    .collect(Collectors.toList());
+        }
 
         return VisitDto.builder()
                 .id(visit.getId())
