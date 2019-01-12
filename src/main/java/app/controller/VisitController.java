@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.model.DtoMapper;
 import app.model.VisitStatus;
+import app.model.dto.CancelVisitDto;
 import app.model.dto.RegisterVisitDto;
 import app.model.dto.VisitDto;
 import app.model.entity.Doctor;
@@ -230,4 +231,43 @@ public class VisitController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body("No proper authority found");
     }
+
+    @RequestMapping(value = "/cancel", method = RequestMethod.POST)
+    public ResponseEntity cancelVisit(@RequestBody CancelVisitDto cancelVisitDto) {
+
+        JwtUser principal = (JwtUser) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+        User user = new User();
+        user.setId(principal.getId());
+
+        Collection<? extends GrantedAuthority> authorities = principal.getAuthorities();
+        if (authorities.contains(patientAuthority)) {
+
+            Patient patient = patientRepository.findByUser(user);
+            List<Integer> patientVisitsIds = visitRepository.findByPatient(patient)
+                    .stream()
+                    .map(Visit::getId)
+                    .collect(Collectors.toList());
+
+            if (patientVisitsIds.contains(cancelVisitDto.getVisitId())) {
+                Visit visitToCancel = visitRepository.findById(cancelVisitDto.getVisitId()).get();
+                visitToCancel.setVisitStatus(VisitStatus.CANCELLED);
+                visitToCancel = visitRepository.save(visitToCancel);
+                return ResponseEntity.ok(DtoMapper.map(visitToCancel));
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Cannot cancel visit which isn't assigned to user");
+            }
+        } else if (authorities.contains(doctorAuthority)) {
+            Visit visitToCancel = visitRepository.findById(cancelVisitDto.getVisitId()).get();
+            visitToCancel.setVisitStatus(VisitStatus.CANCELLED);
+            visitToCancel = visitRepository.save(visitToCancel);
+            return ResponseEntity.ok(DtoMapper.map(visitToCancel));
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No proper authority found");
+    }
+
+
 }
