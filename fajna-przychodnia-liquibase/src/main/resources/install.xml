@@ -159,6 +159,7 @@
             <column name="pesel" value="95112800000"/>
             <column name="phone_number" value="000000000"/>
             <column name="specialisation" value="oncologist"/>
+            <column name="healthcare_unit_id" value="1"/>
             <column name="user_id" value="2"/>
         </insert>
 
