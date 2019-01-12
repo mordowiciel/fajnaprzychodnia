@@ -91,6 +91,7 @@ public class DtoMapper {
                 .symptoms(visit.getSymptoms())
                 .diagnosis(visit.getDiagnosis())
                 .prescriptions(visitPrescriptions)
+                .visitStatus(visit.getVisitStatus())
                 .build();
     }
 }

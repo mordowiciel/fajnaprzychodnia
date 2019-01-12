@@ -180,8 +180,8 @@ public class VisitController {
                 .visitStatus(VisitStatus.AWAITING)
                 .build();
 
-        visitRepository.save(visit);
-        return ResponseEntity.ok("Visit saved!");
+        visit = visitRepository.save(visit);
+        return ResponseEntity.ok(DtoMapper.map(visit));
     }
 
     @RequestMapping(value = "/cancel", method = RequestMethod.POST)
@@ -205,8 +205,8 @@ public class VisitController {
             if (patientVisitsIds.contains(cancelVisitDto.getVisitId())) {
                 Visit visitToCancel = visitRepository.findById(cancelVisitDto.getVisitId()).get();
                 visitToCancel.setVisitStatus(VisitStatus.CANCELLED);
-                visitRepository.save(visitToCancel);
-                return ResponseEntity.ok("Visit cancelled!");
+                visitToCancel = visitRepository.save(visitToCancel);
+                return ResponseEntity.ok(DtoMapper.map(visitToCancel));
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("Cannot cancel visit which isn't assigned to user");
@@ -214,8 +214,8 @@ public class VisitController {
         } else if (authorities.contains(doctorAuthority)) {
             Visit visitToCancel = visitRepository.findById(cancelVisitDto.getVisitId()).get();
             visitToCancel.setVisitStatus(VisitStatus.CANCELLED);
-            visitRepository.save(visitToCancel);
-            return ResponseEntity.ok("Visit cancelled!");
+            visitToCancel = visitRepository.save(visitToCancel);
+            return ResponseEntity.ok(DtoMapper.map(visitToCancel));
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No proper authority found");
@@ -260,9 +260,9 @@ public class VisitController {
             visitToFinish.setDiagnosis(visitFinishRequest.getDiagnosis());
             visitToFinish.setPrescriptions(prescriptionEntities);
             visitToFinish.setVisitStatus(VisitStatus.FINISHED);
-            visitRepository.save(visitToFinish);
+            visitToFinish = visitRepository.save(visitToFinish);
 
-            return ResponseEntity.ok("Visit finished!");
+            return ResponseEntity.ok(DtoMapper.map(visitToFinish));
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)

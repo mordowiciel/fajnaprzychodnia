@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import app.model.VisitStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +27,5 @@ public class VisitDto {
     private String symptoms;
     private String diagnosis;
     private List<PrescriptionSimpleDto> prescriptions;
+    private VisitStatus visitStatus;
 }
