@@ -19,14 +19,14 @@ import app.model.entity.Visit;
 public class DtoMapper {
 
     public static PatientViewDto map(Patient patient) {
-        return PatientViewDto.PatientViewDtoBuilder.builder()
-                .withId(patient.getId())
-                .withFirstName(patient.getUser().getFirstname())
-                .withLastName(patient.getUser().getLastname())
-                .withEmail(patient.getUser().getEmail())
-                .withBirthDate(patient.getBirthDate())
-                .withPesel(patient.getPesel())
-                .withPhoneNumber(patient.getPhoneNumber())
+        return PatientViewDto.builder()
+                .id(patient.getId())
+                .firstName(patient.getUser().getFirstname())
+                .lastName(patient.getUser().getLastname())
+                .email(patient.getUser().getEmail())
+                .birthDate(patient.getBirthDate())
+                .pesel(patient.getPesel())
+                .phoneNumber(patient.getPhoneNumber())
                 .build();
     }
 

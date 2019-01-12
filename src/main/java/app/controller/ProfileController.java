@@ -65,11 +65,12 @@ public class ProfileController {
         if (authorities.contains(patientAuthority)) {
             Patient patient = patientRepository.findByUser(user);
             PatientProfileDto profileDto = PatientProfileDto.builder()
-                    .id(user.getId())
+                    .userId(user.getId())
                     .username(user.getUsername())
                     .email(user.getEmail())
                     .firstName(user.getFirstname())
                     .lastName(user.getLastname())
+                    .patientId(patient.getId())
                     .birthDate(patient.getBirthDate())
                     .pesel(patient.getPesel())
                     .phoneNumber(patient.getPhoneNumber())
@@ -78,11 +79,13 @@ public class ProfileController {
         } else if (authorities.contains(doctorAuthority)) {
             Doctor doctor = doctorRepository.findByUser(user);
             DoctorProfileDto profileDto = DoctorProfileDto.builder()
-                    .id(user.getId())
+                    .userId(user.getId())
                     .username(user.getUsername())
                     .email(user.getEmail())
                     .firstName(user.getFirstname())
                     .lastName(user.getLastname())
+                    .doctorId(doctor.getId())
+                    .healthcareUnitId(doctor.getHealthcareUnit().getId())
                     .birthDate(doctor.getBirthDate())
                     .pesel(doctor.getPesel())
                     .phoneNumber(doctor.getPhoneNumber())

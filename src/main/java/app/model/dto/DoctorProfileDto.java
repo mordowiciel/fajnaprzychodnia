@@ -18,7 +18,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class DoctorProfileDto {
 
-    private Long id;
+    private Long userId;
+    private Integer doctorId;
+    private Integer healthcareUnitId;
     private String username;
     private String email;
     private String firstName;
