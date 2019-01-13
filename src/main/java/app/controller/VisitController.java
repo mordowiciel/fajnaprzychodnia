@@ -196,7 +196,6 @@ public class VisitController {
         Collection<? extends GrantedAuthority> authorities = principal.getAuthorities();
         if (authorities.contains(doctorAuthority)) {
 
-            // TODO: move to mapper
             List<Prescription> prescriptionEntities = visitFinishRequest.getPrescriptions().stream()
                     .map(prescriptionDto -> {
 

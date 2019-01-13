@@ -98,7 +98,6 @@ public class ProfileController {
                 .body("No proper authority found");
     }
 
-    // TODO: update na profilu się pierdoli, do rozkminki
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity updateProfileInfo(@RequestHeader("Authorization") String authorizationHeader,
                                             @RequestBody UpdateProfileDto updateProfileRequest) {
@@ -111,8 +110,6 @@ public class ProfileController {
         String oldToken = authorizationHeader.split("Bearer ")[1];
 
         // First update account-related data
-        // TODO: verify if username/email exist in DB before
-        // TODO: same while registering!
         user.setUsername(updateProfileRequest.getUsername());
         user.setEmail(updateProfileRequest.getEmail());
         user.setFirstname(updateProfileRequest.getFirstName());
@@ -138,7 +135,6 @@ public class ProfileController {
         return ResponseEntity.ok(userUpdatedResponse);
     }
 
-    // TODO: jakakolwiek weryfikacja hasla (dlugosc, znaki specjalne etc)?
     @RequestMapping(value = "/update/pass", method = RequestMethod.POST)
     public ResponseEntity updatePassword(@RequestBody UpdatePasswordDto updatePasswordRequest) {
 

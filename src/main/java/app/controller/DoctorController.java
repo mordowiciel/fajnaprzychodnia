@@ -57,7 +57,6 @@ public class DoctorController {
                 .body(doctors);
     }
 
-    // TODO: extend if needed
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity getDoctorsInHealthcareUnit(@RequestParam(value = "unit") Integer unitId) {
 
@@ -97,7 +96,6 @@ public class DoctorController {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
 
-        // TODO:
         List<LocalTime> currentlyAssignedVisitTimes = visitRepository.findByDoctor(doctor)
                 .stream()
                 .filter(visit -> visit.getVisitDate().toLocalDate().equals(convertedVisitDate))

@@ -23,10 +23,12 @@ import app.model.dto.PatientRegisterDto;
 import app.model.dto.PatientViewDto;
 import app.model.dto.PrescriptionDto;
 import app.model.dto.VisitDto;
+import app.model.entity.Doctor;
 import app.model.entity.Patient;
 import app.model.security.Authority;
 import app.model.security.AuthorityName;
 import app.model.security.User;
+import app.repository.DoctorRepository;
 import app.repository.PatientRepository;
 import app.repository.PrescriptionRepository;
 import app.repository.VisitRepository;
@@ -43,6 +45,8 @@ public class PatientController {
 
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private DoctorRepository doctorRepository;
 
     @Autowired
     private PrescriptionRepository prescriptionRepository;
@@ -61,6 +65,17 @@ public class PatientController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public ResponseEntity getAllPatients(@RequestParam(required = false) Integer doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId).get();
+        List<PatientViewDto> patientForDoctor = patientRepository.findByDoctor(doctor)
+                .stream()
+                .map(DtoMapper::map)
+                .collect(Collectors.toList());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(patientForDoctor);
+    }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity getPatientInfo(@PathVariable(value = "id") Integer patientId) {
