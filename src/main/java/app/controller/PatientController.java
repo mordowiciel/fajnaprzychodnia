@@ -23,7 +23,6 @@ import app.model.dto.PatientRegisterDto;
 import app.model.dto.PatientViewDto;
 import app.model.dto.PrescriptionDto;
 import app.model.dto.VisitDto;
-import app.model.entity.Doctor;
 import app.model.entity.Patient;
 import app.model.security.Authority;
 import app.model.security.AuthorityName;
@@ -66,9 +65,8 @@ public class PatientController {
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity getAllPatients(@RequestParam(required = false) Integer doctorId) {
-        Doctor doctor = doctorRepository.findById(doctorId).get();
-        List<PatientViewDto> patientForDoctor = patientRepository.findByDoctor(doctor)
+    public ResponseEntity getAllPatients() {
+        List<PatientViewDto> patientForDoctor = patientRepository.findAll()
                 .stream()
                 .map(DtoMapper::map)
                 .collect(Collectors.toList());
