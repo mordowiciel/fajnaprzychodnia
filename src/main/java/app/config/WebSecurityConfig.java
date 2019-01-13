@@ -92,7 +92,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**/**").permitAll()
 
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/patients/**").hasRole("ADMIN")
+                .antMatchers("/patient/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         httpSecurity
