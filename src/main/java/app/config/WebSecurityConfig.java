@@ -77,20 +77,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                // we don't need CSRF because our token is invulnerable
                 .csrf().disable()
                 .cors()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-
-                // don't create session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-
                 .authorizeRequests()
-
-                // Un-secure H2 Database
-                .antMatchers("/h2-console/**/**").permitAll()
-
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/patient/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
@@ -98,15 +90,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // disable page caching
         httpSecurity
                 .headers()
-                .frameOptions().sameOrigin()  // required to set for H2 else H2 Console will be blank.
+                .frameOptions()
+                .sameOrigin()
                 .cacheControl();
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
+
         // AuthenticationTokenFilter will ignore the below paths
         web
                 .ignoring()
@@ -115,7 +108,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         authenticationPath,
                         "/register"
                 )
-                // allow anonymous resource requests
                 .and()
                 .ignoring()
                 .antMatchers(
@@ -126,12 +118,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js"
-                )
-
-                // Un-secure H2 Database (for testing purposes, H2 console shouldn't be unprotected in production)
-                .and()
-                .ignoring()
-                .antMatchers("/h2-console/**/**");
+                );
     }
 
 

@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class DoctorProfileDto {
-
     private Long userId;
     private Integer doctorId;
     private Integer healthcareUnitId;

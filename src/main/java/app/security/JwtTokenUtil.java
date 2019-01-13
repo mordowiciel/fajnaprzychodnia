@@ -83,7 +83,6 @@ public class JwtTokenUtil implements Serializable {
             .setIssuedAt(createdDate)
             .setExpiration(expirationDate)
             .signWith(SignatureAlgorithm.HS512, secret)
-//                .signWith(secret, SignatureAlgorithm.HS512)
             .compact();
     }
 
@@ -111,7 +110,6 @@ public class JwtTokenUtil implements Serializable {
         JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
         final Date created = getIssuedAtDateFromToken(token);
-        //final Date expiration = getExpirationDateFromToken(token);
         return (
             username.equals(user.getUsername())
                 && !isTokenExpired(token)
