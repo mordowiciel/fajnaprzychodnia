@@ -1,6 +1,6 @@
 package app.controller;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -93,18 +93,20 @@ public class DoctorController {
                 30
         );
 
-        LocalDateTime convertedVisitDate = visitDate.toInstant()
+        LocalDate convertedVisitDate = visitDate.toInstant()
                 .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+                .toLocalDate();
 
-        List<LocalTime> currentlyAssignedVisitsTimes = visitRepository
-                .findByDoctorAndVisitDate(doctor, convertedVisitDate)
+        // TODO:
+        List<LocalTime> currentlyAssignedVisitTimes = visitRepository.findByDoctor(doctor)
                 .stream()
+                .filter(visit -> visit.getVisitDate().toLocalDate().equals(convertedVisitDate))
                 .map(visit -> visit.getVisitDate().toLocalTime())
                 .collect(Collectors.toList());
 
+
         List<LocalTime> freeVisitTimes = visitTimesInWorkingHours.stream()
-                .filter(visitTime -> !currentlyAssignedVisitsTimes.contains(visitTime))
+                .filter(visitTime -> !currentlyAssignedVisitTimes.contains(visitTime))
                 .collect(Collectors.toList());
 
         return ResponseEntity
