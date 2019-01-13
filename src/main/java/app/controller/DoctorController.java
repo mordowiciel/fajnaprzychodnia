@@ -51,7 +51,9 @@ public class DoctorController {
 
     @RequestMapping(value = "/allDoctors", method = RequestMethod.GET)
     public ResponseEntity allDoctors() {
-        List<Doctor> doctors = doctorRepository.findAll();
+        List<DoctorViewDto> doctors = doctorRepository.findAll().stream()
+                .map(DtoMapper::map)
+                .collect(Collectors.toList());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(doctors);
@@ -69,6 +71,14 @@ public class DoctorController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(doctors);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity allDoctors(@PathVariable(value = "id") Integer doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId).get();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(DtoMapper.map(doctor));
     }
 
     @RequestMapping(value = "/{id}/free", method = RequestMethod.GET)

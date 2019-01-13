@@ -106,7 +106,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         HttpMethod.POST,
                         authenticationPath,
-                        "/register"
+                        "/patient//register"
                 )
                 .and()
                 .ignoring()

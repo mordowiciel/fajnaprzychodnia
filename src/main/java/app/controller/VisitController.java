@@ -135,7 +135,7 @@ public class VisitController {
         if (authorities.contains(patientAuthority)) {
             Patient patient = patientRepository.findByUser(user);
             visits = visits.stream()
-                    .filter(visit -> !(visit.getPatient().getId() == patient.getId()))
+                    .filter(visit -> (visit.getPatient().getId() == patient.getId()))
                     .collect(Collectors.toList());
             return ResponseEntity
                     .status(HttpStatus.OK)
